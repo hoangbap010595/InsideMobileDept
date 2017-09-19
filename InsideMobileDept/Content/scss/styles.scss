@@ -1,0 +1,148 @@
+﻿//SetColor
+$primary: #ffffff;
+$panel-color: #252c33;//Màu nền header
+$color-primary: #337ab7;
+$color-primary-border: #2e6da4;
+$color-danger: #d9534f;
+$color-danger-border: #d9534f;
+$color-warning: #f0ad4e;
+$color-warning-border: #d43f3a;
+$color-info: #5bc0de;
+$color-info-border: #46b8da;
+$color-success: #5cb85c;
+$color-success-border: #4cae4c;
+$color-transparent: transparent;
+
+
+body {
+    background-color: $primary;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.wrapper {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.clear {
+    clear: both;
+}
+
+/*-------------BEGIN HEADER-------------*/
+#headerTop {
+    height: 39px;
+    padding: 9px 10px;
+    background-color: $panel-color;
+    box-shadow: 0px 2px 2px #888888;
+    div a {
+        color: yellow;
+        text-decoration: none;
+
+        &:hover {
+            color: aliceblue;
+        }
+    }
+}
+#headerContent {
+    height: 111px;
+    padding: 0 10px;
+}
+#headerBottom {
+    height: 50px;
+    background-color: darkslategray;
+    box-shadow: 0px 5px 8px #888888;
+
+    .menu {
+        height: 50px;
+        background-color: chocolate;
+        position: relative;
+        top: 22px;
+    }
+}
+/*-------------END HEADER-------------*/
+
+/*-------------BEGIN CONTENT-------------*/
+#panel-login{
+    width:333px;
+    margin: 0 auto;
+    margin-top: 111px !important;
+    box-shadow: 0px 5px 15px #888888;
+}
+.text-white{
+    color: white;
+}
+#btn-login{
+    width:100%;
+}
+
+#label-login-remember{
+    opacity: 0.8;
+}
+.validation-summary-errors ul{
+    list-style: circle;
+}
+.validation-summary-errors ul li{
+    font-weight: bold;
+    color: red;
+}
+#label-panel-footer{
+    font-size: 11px;
+}
+
+#button-remind{
+    background-image: url(../images/icons/remind.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    position:absolute;
+    background-color: $color-transparent;
+    border: none;
+    top: -5px;
+    right:60px;
+    width:30px;
+    height:30px;
+}
+#button-logout{
+    background-image: url(../images/icons/logout.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    position:absolute;
+    background-color: $color-transparent;
+    border: none;
+    top: -5px;
+    right:10px;
+    width:30px;
+    height:30px;
+    &:hover{
+        background-image: url(../images/icons/logout2.png);
+    }
+}
+.badge-remind{
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: red;
+    border-radius: 10px;
+}
+
+/*-------------END CONTENT-------------*/
+
+/*-------------BEGIN FOOTER-------------*/
+#footer{
+    background-color: mediumpurple;
+}
+/*-------------END FOOTER-------------*/
