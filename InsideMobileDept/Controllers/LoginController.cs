@@ -17,7 +17,7 @@ namespace InsideMobileDept.Controllers
         // GET: Login
         public ActionResult Index()
         {
-            SessionPersister.Username = "sysadmin";
+            //SessionPersister.Username = "sysadmin";
             if (!string.IsNullOrEmpty(SessionPersister.Username))
                 return RedirectToAction("Index", "Home");
             SessionPersister.Username = string.Empty;

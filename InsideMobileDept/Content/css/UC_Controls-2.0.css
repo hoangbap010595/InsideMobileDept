@@ -258,20 +258,22 @@ td.view0[data-content='0'], td.view0[data-content='0'] a {
         color: black;
     }
 /********************|Kendo PanelBar|********************/
-.KendoPanelBar li li > span > span:nth-child(1) {
-    padding-left: 20px;
+.KendoPanelBar li li > span > span:nth-child(2) {
+    padding-left: 10px;
 }
 
-.KendoPanelBar li li li > span > span:nth-child(1) {
-    padding-left: 40px;
+.KendoPanelBar li li li > span > span:nth-child(2) {
+    padding-left: 50px;
 }
 
-.KendoPanelBar li > span > span:nth-child(1) {
-    font-weight: bold;
+.KendoPanelBar li > span > span:nth-child(2) {
+    /*font-weight: bold;*/
     padding-left: 0px;
     color: black;
 }
-
+.KendoPanelBar li .k-link .k-header{
+     padding-left: 1px;
+}
 .KendoPanelBar li > div:first-of-type {
 }
 

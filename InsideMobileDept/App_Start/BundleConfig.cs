@@ -30,7 +30,6 @@ namespace InsideMobileDept
                        "~/Scripts/touch-swipe/jquery.touch-swipe.min.js",
                        "~/Scripts/kendo/jquery.min.js",
                        "~/Scripts/kendo/kendo.all.min.js",
-                       "~/Scripts/UC_Controls-2.0.js",
                        "~/Scripts/gridmvc.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -40,8 +39,7 @@ namespace InsideMobileDept
                         "~/Content/kendo/kendo.mobile.all.min.css",
                         "~/Content/kendo/kendo.bootstrap.min.css",
                         "~/Content/kendo/kendo.bootstrap.mobile.min.css",
-                        "~/Content/css/Gridmvc.css",
-                        "~/Content/css/UC_Controls-2.0.css"));
+                        "~/Content/css/Gridmvc.css"));
 
             // Jquery UI
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

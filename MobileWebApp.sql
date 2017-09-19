@@ -185,10 +185,9 @@ CREATE TABLE [dbo].[HistoryPayment] (
 
 CREATE TABLE [dbo].[Menu] (
     [Id]			INT IDENTITY(1,10) NOT NULL,
-	[Level]			INT NULL,
 	[Name]			NVARCHAR (256)       NULL,
 	[Description]   NVARCHAR (256) NULL,
-	[Link]			NVARCHAR (256) NULL,
+	[Path]			NVARCHAR (256) NULL,
     CONSTRAINT [PK_dbo.Menu] PRIMARY KEY CLUSTERED ([Id] ASC)
 )
 CREATE TABLE [dbo].[SubMenu] (
@@ -196,12 +195,29 @@ CREATE TABLE [dbo].[SubMenu] (
 	[MenuLevel]		INT,
 	[Name]			NVARCHAR (256)       NULL,
 	[Description]   NVARCHAR (256) NULL,
-	[Link]			NVARCHAR (256) NULL,
-	[Controller]	NVARCHAR (256) NULL,
-	[Action]	NVARCHAR (256) NULL,
+	[Path]			NVARCHAR (256) NULL,
     CONSTRAINT [PK_dbo.SubMenu] PRIMARY KEY CLUSTERED ([Id] ASC)
 )
-
+GO
+Insert into  [dbo].[Menu]([Name],[Description],[Path])
+values('Menu Product',N'Quản trị sản phẩm','')
+	,('Menu Dept',N'Quản trị công nợ','')
+	,('Menu Report',N'Báo cáo','')
+	,('Menu System',N'Hệ thống','')
+	,('Menu History',N'Lịch sử giao dịch','')
+	,('Menu Setting',N'Cài đặt','')
+go
+Insert into  [dbo].[SubMenu]([MenuLevel],[Name],[Description],[Path])
+values(1,'Menu Product',N'Thêm mới','')
+	,(1,'Menu Product',N'Cập nhật','')
+	,(1,'Menu Product',N'Danh sách','')
+	,(11,'Menu Dept',N'Tạo phiếu','')
+	,(11,'Menu Dept',N'Cập nhật phiếu','')
+	,(11,'Menu Dept',N'Thanh toán','')
+	,(21,'Menu Report',N'Báo cáo công nợ','')
+	,(21,'Menu Report',N'Báo cáo doanh thu','')
+	,(21,'Menu Report',N'Báo cáo tổng tiền cần thu','')
+	,(21,'Menu Report',N'Báo cáo tổng tiền trễ hẹn ','')
 go
 Insert into [dbo].[PaymentType]([Name],[Description],[Type],[Enable])
 values ('TG',N'Trả góp',1, 1)
@@ -213,6 +229,7 @@ Insert into [dbo].[PaymentStatus]([Name],[Description],[Type],[Enable])
 values ('NOT Payment',N'Chưa thanh toán',1, 1)
 	,('Keep Payment',N'Đang thanh toán',1, 1)
 	,('OK Payment',N'Đã thanh toán',1, 1)
+	,('STOP Payment',N'Hủy thanh toán',1, 1)
 
 GO
 Insert into [dbo].[Roles]

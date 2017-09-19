@@ -13,6 +13,7 @@ namespace InsideMobileDept.Controllers
         // GET: Home
         public ActionResult Index()
         {
+            ViewData["Action"] = "Trang chủ";
             return View();
         }
 

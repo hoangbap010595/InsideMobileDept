@@ -89,8 +89,8 @@ var KendoGridTextAll = {
                 "<td><div id=\"cbbDrawTypeChart\"></div></td>" +
             "</tr>" +
         "</table>"
-    , dfUrlLoadData: "/PartialView/v2PartialView/LoadData"
-    , dfUrlExportExcel: "/PartialView/v2PartialView/ExportExcel"
+    , dfUrlLoadData: "/PartialView/PartialView/LoadData"
+    , dfUrlExportExcel: "/PartialView/PartialView/ExportExcel"
 }
 var KendoWindowTextAll = {
     actions: ["Pin", "Minimize", "Maximize", "Close"]
@@ -115,8 +115,8 @@ var UCNotsave = ["btnAlertOk", "btnConfirmCancel", "btnConfirmOk", "gridMenu_btn
 
 $(document).ready(function () {
     UC = {};
-    createSMS();
-    createMenu();
+    //createSMS();
+    //createMenu();
 });
 
 /**************|OverWrites Find Contain in Jquery|**************/
@@ -2675,18 +2675,15 @@ function cbbDefaultChange(e) {
     }
 };
 
-function getDataCbbCompany() {
+function getDataCbbPaymentType() {
     var d = {
-        ctrID: "cbbCompany"
-        , dataTextField: "CompanyName"
-        , dataValueField: "CompanyID"
-        , placeholder: "Chọn công ty..."
-        , optionLabel: { CompanyName: "Chọn công ty", CompanyID: null }
-        , cascadings: [
-            { ctrID: "cbbSubCompany" }
-            , { ctrID: "cbbLocation", valueField: "Code", format: "string", filterField: "CompanyCode" }]
+        ctrID: "cbbPaymentType"
+        , dataTextField: "TypeName"
+        , dataValueField: "TypeID"
+        , placeholder: "Chọn loại thanh toán..."
+        , optionLabel: { CompanyName: "Chọn loại thanh toán", CompanyID: null }
         , onChange: cbbDefaultChange
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetCompany" }
+        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "spGetPaymentType" }
         , filter: null
         , maxSelectedItems: null
         , k: null
@@ -2695,484 +2692,19 @@ function getDataCbbCompany() {
     return d;
 }
 
-function getDataCbbSubCompany(config) {
+function getDataCbbPaymentStatus() {
     var d = {
-        ctrID: "cbbSubCompany"
-        , dataTextField: "SubCompanyName"
-        , dataValueField: "SubCompanyID"
-        , placeholder: "Chọn vùng kinh doanh..."
-        , optionLabel: { SubCompanyName: "Chọn vùng kinh doanh", SubCompanyID: null }
-        , cascadings: [{ ctrID: "cbbBranch" }]
+        ctrID: "cbbPaymentStatus"
+        , dataTextField: "TypeName"
+        , dataValueField: "TypeID"
+        , placeholder: "Chọn trạng thái..."
+        , optionLabel: { CompanyName: "Chọn trạng thái", CompanyID: null }
         , onChange: cbbDefaultChange
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetSubCompany" }
-        , filter: { CompanyID: "" }
-        , maxSelectedItems: null
-        , k: null
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbLocation(config) {
-    var d = {
-        ctrID: "cbbLocation"
-        , dataTextField: "LocationName"
-        , dataValueField: "ID"
-        , filterField: "LocationID"
-        , value: User.LocationID
-        , placeholder: "Chọn vùng miền..."
-        , optionLabel: { LocationName: "Chọn vùng miền", ID: null }
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetLocation" }
-        , filter: { UserName: "", INSID: -1, CompanyCode: "", SubParentDesc: "" }
-        , cascadings: [{ ctrID: "cbbBranchCode" }, { ctrID: "cbbDistrict" }]
-        , onChange: cbbDefaultChange
-        , maxSelectedItems: null
-        , k: null
-        , kendoData: kd.km
-        , onSuccess: function (data) {
-            var ctrType = getKendoControlType({ ctrID: d.ctrID });
-            if (ctrType == kd.kdrl) { return; }
-            var ctrID2 = "#" + d.ctrID;
-            var cbbLocation = $(ctrID2).data(ctrType);
-            cbbLocation.UC.value(User.LocationID);
-        }
-    };
-    if (isLocalHost()) { delete d.onSuccess; delete d.value }
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbBranchCode(config) {
-    var d = {
-        ctrID: "cbbBranchCode"
-        , dataTextField: "BranchCodeName"
-        , dataValueField: "ID"
-        , value: -1
-        , placeholder: "Chọn chi nhánh..."
-        , optionLabel: { BranchCodeName: "Chọn chi nhánh", ID: null }
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetBranchCode" }
-        , filter: { LocationID: User.LocationID }
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbBranch(config) {
-    var d = {
-        ctrID: "cbbBranch"
-        , dataTextField: "BranchFullName"
-        , dataValueField: "BranchName"
-        , placeholder: "Chọn chi nhánh..."
-        , optionLabel: { BranchFullName: "Chọn chi nhánh", BranchName: null }
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetBranch" }
-        , filter: {
-            UserName: ""
-            , INSID: -1
-            , Type: 0
-            , SubCompanyID: ""
-        }
-        , cascadings: [{ ctrID: "cbbDistrict", valueField: "LocationID", filterField: "LocationID" }]
-        , onChange: cbbDefaultChange
-        , onSuccess: function (data) {
-            var ctrType = getKendoControlType({ ctrID: d.ctrID });
-            if (ctrType == kd.kdrl) { return; }
-            var ctrID2 = "#" + d.ctrID;
-            var cbbBranch = $(ctrID2).data(ctrType);
-            var BranchID = [];
-            data.filter(function (br) {
-                if (br.LocationID == User.LocationID) {
-                    BranchID.push(br.BranchName);
-                }
-            });
-            cbbBranch.UC.value(BranchID);
-            var cbb = $("#" + cbbBranch.UC.ctrID).parent();
-            var td = cbb.parent();
-            var prevTd = td.prev();
-            prevTd.click(function() {
-                cbbBranch.UC.value([]);
-            })
-        }
-    };
-    if (isLocalHost()) { delete d.onSuccess; }
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbStaff(config) {
-    var d = {
-        ctrID: "cbbStaff"
-        , dataValueField: "StaffID"
-        , dataTextField: "StaffName"
-        , placeholder: "Chọn nhân viên..."
-        , optionLabel: { StaffName: "Chọn nhân viên", StaffID: null }
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetStaff" }
-        , filter: { LocationID: "-1", FindField: "", FindOperator: "", FindValue: "" }
-        , maxSelectedItems: null
-        , k: null
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbCusType(config) {
-    var d = {
-        ctrID: "cbbCusType"
-        , dataTextField: "CusTypeName"
-        , dataValueField: "ID"
-        , placeholder: "Chọn loại hình khách hàng..."
-        , optionLabel: { ID: null, CusTypeName: "Chọn loại hình khách hàng" }
-        , url: "/PartialView/PartialView/LoadCusType"
-        , filter: null
-    }
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbStatus(config) {
-    var d = {
-        ctrID: "cbbStatus"
-        , dataTextField: "StatusName"
-        , dataValueField: "ID"
-        , placeholder: "Chọn tình trạng hợp đồng..."
-        , url: "/PartialView/PartialView/LoadStatus"
-        , filter: null
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbStatusSuspend() {
-    var d = getDataCbbStatus();
-    d.ctrID = "cbbStatusSuspend";
-    d.url += "Suspend";
-    d.placeholder = "Chọn tình trạng ngưng sử dụng";
-
-    return d;
-}
-
-function getDataCbbEOC(config) {
-    var d = {
-        ctrID: "cbbEOC"
-        , dataTextField: "EOCName"
-        , dataValueField: "ID"
-        , placeholder: "Chọn loại EOC..."
-        , url: "/PartialView/PartialView/LoadEOC"
-        , filter: null
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbServicesType() {
-    var d = {
-        ctrID: "cbbServicesType"
-        , dataTextField: "Text"
-        , dataValueField: "Value"
-        , value: "[Object]"
-        , data: [
-            { Text: "Tất cả", Value: "[Object]" }
-            , { Text: "Internet", Value: "ObjectInternet" }
-            , { Text: "TV", Value: "ObjectPayTV" }
-            , { Text: "Office 365", Value: "Office365" }
-        ]
-    };
-
-    return d;
-}
-
-function getDataCbbDistrict(config) {
-    var d = {
-        ctrID: "cbbDistrict"
-        , dataTextField: "DistrictName"
-        , dataValueField: "ID"
-        , filterField: "DistrictID"
-        , placeholder: "Chọn quận..."
-        , optionLabel: { DistrictName: "Chọn quận", ID: null }
-        , cascadings: [{ ctrID: "cbbWard" }, { ctrID: "cbbStreet" }]
-        , onChange: cbbDefaultChange
-        //, url: "/PartialView/PartialView/LoadDistrict"
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetDistrict" }
-        , filter: { LocationID: "" }
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbWard(config) {
-    var d = {
-        ctrID: "cbbWard"
-        , dataTextField: "WardName"
-        , dataValueField: "ID"
-        , filterField: "WardID"
-        , placeholder: "Chọn phường..."
-        , optionLabel: { WardName: "Chọn phường", ID: null }
-        , cascadings: [{ ctrID: "cbbStreet" }]
-        //, url: "/PartialView/PartialView/LoadWard"
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetWard" }
-        , filter: { DistrictID: "" }
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbStreet(config) {
-    var d = {
-        ctrID: "cbbStreet"
-         , dataTextField: "Name"
-         , dataValueField: "ID"
-         , placeholder: "Chọn đường phố..."
-         , optionLabel: { Name: "Chọn đường phố", ID: null }
-         , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetListStreet" }
-         , filter: { DistrictID: "", WardID: "" }
-         , maxSelectedItems: null
-         , k: null
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbFN() {
-    var d = {
-        ctrID: "cbbFN"
-        , dataTextField: "Text"
-        , dataValueField: "Value"
-        , filterField: "FNID"
-        , placeholder: "Chọn loại FN..."
-        , optionLabel: { Text: "Chọn loại FN", Value: null }
-        , cascadings: [{ ctrID: "cbbLocalType" }]
-        , onChange: cbbDefaultChange
-        , data: [
-            { Text: "ADSL", Value: "0" }
-            , { Text: "FTTH", Value: "1" }
-            , { Text: "VDSL", Value: "2" }
-            , { Text: "ADSL2+", Value: "3" }
-            , { Text: "Khác", Value: "-123" }
-        ]
-    };
-
-    return d;
-}
-
-function getDataCbbLocalType(config) {
-    var FNID = "";
-    if (UC.cbbFN != null) {
-        FNID = UC.cbbFN.UC.value();
-        FNID = (FNID.length <= 0) ? "-1" : FNID;
-    }
-    var d = {
-        ctrID: "cbbLocalType"
-        , dataTextField: "LocalTypeName"
-        , dataValueField: "ID"
-        , placeholder: "Chọn loại dịch vụ..."
-        , optionLabel: { LocalTypeName: "Chọn gói dịch vụ", ID: null }
-        , url: "/PartialView/PartialView/LoadLocalType"
-        , filter: { FNID: FNID }
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbSSStatus() {
-    var d = {
-        ctrID: "cbbSSStatus"
-        , dataTextField: "StatusName"
-        , dataValueField: "ID"
-        , placeholder: "Chọn tình trạng khảo sát..."
-        , url: "/PartialView/PartialView/LoadSSStatus"
-        , filter: null
-    };
-
-    return d;
-}
-
-function getDataCbbCAType() {
-    var d = {
-        ctrID: "cbbCAType"
-        , dataTextField: "Text"
-        , dataValueField: "Value"
-        , placeholder: "Chọn loại CA..."
-        , data: [
-            { Text: "Bạc", Value: 17 }
-            , { Text: "Vàng", Value: 16 }
-            , { Text: "Kim cương", Value: 15 }
-        ]
-    };
-
-    return d;
-}
-
-function getDataCbbGroupType() {
-    var d = {
-        ctrID: "cbbGroupType"
-        , dataTextField: "Text"
-        , dataValueField: "Value"
-        , value: "LocalType"
-        , data: [
-           { Text: "Gói dịch vụ", Value: "LocalType" }
-            , { Text: "Quận", Value: "District" }
-            , { Text: "Nhân viên bán", Value: "SalesID" }
-        ]
-    };
-
-    return d;
-}
-
-function getDataCbbFindOperator(config) {
-    var d = {
-        ctrID: "cbbFindOperator"
-        , dataTextField: "Text"
-        , dataValueField: "Value"
-        , value: "contains"
-        , data: [
-            { Text: "Chính xác", Value: "eq" }
-            , { Text: "Bắt đầu bằng", Value: "startswith" }
-            , { Text: "Có trong", Value: "contains" }
-        ]
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbDivision(config) {
-    var d = {
-        ctrID: "cbbDivision"
-        , dataTextField: "Name"
-        , dataValueField: "ID"
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetDivision" }
-        , filter: { LocationID: User.LocationID }
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbCusDiv(config) {
-    var d = {
-        ctrID: "cbbCusDiv"
-       , dataTextField: "Text"
-       , dataValueField: "Value"
-       , value: ""
-       , data: [
-           { Text: "CUS 0", Value: "0" }
-           , { Text: "CUS 1", Value: "1" }
-           , { Text: "CUS 2", Value: "2" }
-           , { Text: "CUS 3", Value: "3" }
-           , { Text: "CUS 4", Value: "4" }
-           , { Text: "CUS 5", Value: "5" }
-           , { Text: "CUS 6", Value: "6" }
-           , { Text: "CUS 7", Value: "7" }
-           , { Text: "CUS 8", Value: "8" }
-           , { Text: "CUS 9", Value: "9" }
-           , { Text: "CUS 10", Value: "10" }
-           , { Text: "CUS 11", Value: "11" }
-           , { Text: "CUS 30", Value: "30" }
-           , { Text: "CUS 50", Value: "50" }
-           , { Text: "CUS 90", Value: "90" }
-
-       ]
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbYesNo(config) {
-    var d = {
-        ctrID: "cbbAcceptance"
-        , dataTextField: "Text"
-        , dataValueField: "Value"
-        , value: true
-        , data: [{ Text: "Yes", Value: true }
-                , { Text: "No", Value: false }]
-        , optionLabel: { Text: "Chọn...", Value: null }
-    }
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbINSJob(config) {
-    var d = {
-        ctrID: "cbbINSJob"
-        , dataValueField: "ID"
-        , dataTextField: "JobName"
-        , placeholder: "Không chọn"
-        , url: { url: dfUrlLoadData, spName: "PowerData.dbo.spGetSPVKind" }
-        , filter: { TypeID: "-1", ParentID: "-1" }
-    };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbJobFunction(config) {
-    var d = getDataCbbINSJob();
-    d.ctrID = "cbbJobFunction";
-    d.filter.TypeID = "2";
-    d.cascadings = [{ ctrID: "cbbSubFunction", filterField: "ParentID" }];
-    d.onChange = cbbDefaultChange;
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbSubFunction(config) {
-    var d = getDataCbbINSJob();
-    d.ctrID = "cbbSubFunction";
-    d.filter.TypeID = "3";
-    d.width = "350px";
-    d.cascadings = [{ ctrID: "cbbInsideAuthoCode", filterField: "ParentID" }];
-    d.onChange = cbbDefaultChange;
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbInsideAuthoCode(config) {
-    var d = getDataCbbINSJob();
-    d.ctrID = "cbbInsideAuthoCode";
-    d.filter.TypeID = "4";
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbJobTitle(config) {
-    var d = getDataCbbINSJob();
-    d.ctrID = "cbbJobTitle";
-    d.filter.TypeID = "5";
-    d.dataValueField = "JobCode";
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
-
-    return d;
-}
-
-function getDataCbbPaidType(config) {
-    var d = {
-        ctrID: "cbbPaidType"
-        , dataTextField: "Name"
-        , dataValueField: "PaidType"
-        , placeholder: "Chọn hình thức thanh toán..."
-        , optionLabel: { Name: "Chọn hình thức thanh toán", PaidType: -1 }
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetPaidTypeList" }
+        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "spGetPaymentStatus" }
         , filter: null
         , maxSelectedItems: null
         , k: null
     };
-    if (config != null) { d = refigUserData({ d: d, config: config }); }
 
     return d;
 }
@@ -3280,6 +2812,17 @@ function selectTab(allData) {
     }
 }
 
+function removeTab(allData) {
+    var ctrID = allData.ctrID;
+    var ctrID2 = "#" + ctrID;
+    var index = allData.index;
+
+    var tabstrip = $(ctrID2).data(kd.kts);
+    if (tabstrip != null) {
+        tabstrip.remove(index);
+    }
+}
+
 function selectPanelbar(allData) {
     var d = allData;
     var ctrID2 = "#" + d.ctrID;
@@ -3381,7 +2924,7 @@ function isLocalHost() {
     var value = false;
     var myUrl = window.location.href;
     var k = myUrl.indexOf("localhost");
-    if (k != -1 || User.UserName == "namlh7") {
+    if (k != -1 || User.UserName == "hoanglc3") {
         value = true;
     }
 
@@ -3569,7 +3112,7 @@ function getUrlParameters(allData) {
 /*****************|Menu|*****************/
 function createMenu() {
     var UserName = User.UserName;
-    var UserAllow = ["oanh254", "Oanh254", "oanhvk", "namlh7", "ducht", "phuongtt1", "hiennt7", "dungha1", "thailn", "lamkbd", "leltm", "thetm", "congtt", "phuoctd", "Thuynt88"];
+    var UserAllow = ["HoangLC"];
     var n = UserAllow.indexOf(UserName);
     if (n == -1) { return; }
     $("#dMenu").css("display", "block");

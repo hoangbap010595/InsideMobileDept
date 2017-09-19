@@ -8,7 +8,7 @@ body {
   white-space: normal; }
 
 .wrapper {
-  width: 80%;
+  width: 100%;
   margin: 0 auto; }
 
 .clear {
@@ -108,6 +108,28 @@ body {
   vertical-align: baseline;
   background-color: red;
   border-radius: 10px; }
+
+.panel-header {
+  padding-left: 15px;
+  font-size: 16px;
+  font-weight: bold; }
+
+.panel-header-item {
+  font-weight: 600;
+  color: #333 !important;
+  text-decoration: none !important; }
+
+.panel-header li > span > span:nth-child(2) {
+  padding-left: 25px; }
+
+.panel-main {
+  width: 100%;
+  margin: 0 30px;
+  transition: .25s;
+  z-index: 10; }
+
+.panel-main-move {
+  margin-left: 300px; }
 
 /*-------------END CONTENT-------------*/
 /*-------------BEGIN FOOTER-------------*/
