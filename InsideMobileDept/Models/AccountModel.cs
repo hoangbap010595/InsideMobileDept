@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace InsideMobileDept.Models
@@ -13,9 +14,13 @@ namespace InsideMobileDept.Models
 
         public AccountModel()
         {
-            string sql = "SELECT Username, Password, Role FROM Account";
-            DataSet ds = v1SqlHelper.ExecuteDataset(strCon, CommandType.Text, sql);
-
+            SqlParameter[] para = new SqlParameter[]
+            {
+                new SqlParameter("@Username", ""),
+                new SqlParameter("@Password", "" ),
+                new SqlParameter("@Type", 2),
+            };
+            DataSet ds = v1SqlHelper.ExecuteDataset(strCon, "[dbo].[checkLoginUser]", para);
             listAccounts = GetTableRows(ds.Tables[0]);
         }
 
@@ -35,7 +40,7 @@ namespace InsideMobileDept.Models
                 foreach (DataColumn col in dt.Columns)
                 {
                     rowData.Username = dr["Username"].ToString().ToUpper();
-                    rowData.Password = dr["Password"].ToString();
+                    rowData.FullName = dr["FullName"].ToString();
                     rowData.Role = dr["Role"].ToString().Split(',');
                 }
                 listData.Add(rowData);

@@ -116,7 +116,7 @@ var UCNotsave = ["btnAlertOk", "btnConfirmCancel", "btnConfirmOk", "gridMenu_btn
 $(document).ready(function () {
     UC = {};
     //createSMS();
-    //createMenu();
+    createMenu();
 });
 
 /**************|OverWrites Find Contain in Jquery|**************/
@@ -3111,83 +3111,35 @@ function getUrlParameters(allData) {
 
 /*****************|Menu|*****************/
 function createMenu() {
-    var UserName = User.UserName;
-    var UserAllow = ["HoangLC"];
-    var n = UserAllow.indexOf(UserName);
-    if (n == -1) { return; }
-    $("#dMenu").css("display", "block");
-    $("#imgMenu").css("display", "block");
-    var d1 = getDataMenu();
-    var ctrID = d1.ctrID;
-    var ctrID2 = "#" + ctrID;
-    var gridType = d1.gridType;
-    KendoGridReset({ ctrID: ctrID });
-    var f = new Object();
-    var d = KendoGridLevelGetData(d1);
-    d.Columns[0].width = "22px";
-    var columns = d.Columns;
-    f.dataSource = d.DataSource;
-    f.columns = columns;
-    f.selectable = d.Selectable;
-    f.filterable = d.FilterAble;
-    f.sortable = d.SortAble;
-    f.pageable = d.PageAble;
-    d.GridType = gridType;
-    var kg = $(ctrID2).kendoGrid(f).data(kd.kg);
-    kg.UC = d;
-    KendoLoadAjax({ ctrID: ctrID, isLoad: true });
+    createKendoPanelBar({ ctrID: "panelbarmenu" });
+    var $toggleButton = $('.toggle-button'),
+        $menuWrap = $('.menu-wrap'),
+        $menuToggle = $('.menu-toggle'),
+        $panelMain = $('.panel-main'),
+        $panelWrapper = $('.wrapper');
+    // Hamburger button
+    $toggleButton.on('click', function () {
+        $(this).toggleClass('button-open');
+        $menuWrap.toggleClass('menu-show');
+        $menuToggle.toggleClass('menu-toggle-move');
+        $panelMain.toggleClass('panel-main-move');
+        $panelWrapper.toggleClass('wrapper-move');
+    });
+
+    var $sidebarArrow = $('.sidebar-menu-arrow');
+
+    // Sidebar navigation arrows
+    $sidebarArrow.click(function () {
+        $(this).next().slideToggle(300);
+    });
+
     getAjaxCallObject({
-        url: d1.url
-        , filter: d1.filter
+        url: ""
+        , filter: ""
         , onSuccess: function (data) {
-            if (data == null || jQuery.type(data) == "string") { alert({ title: sms.error, message: data }); return; }
-            kg.UC["Data"] = data;
-            KendoGridLevelRefig({ ctrID: ctrID });
-            var tbExpCol = $(ctrID2 + "_tbExpCol");
-            tbExpCol.css("display", "none");
+           
         }
     });
-}
-
-function getDataMenu() {
-    var d = {
-        ctrID: "gridMenu"
-        , url: { url: KendoGridTextAll.dfUrlLoadData, spName: "PowerData.dbo.spGetMenuMVC" }
-        , columns: [
-            { field: "Name", title: "Menu", template: "#=(Path=='')?Name:\"<a href='\"+Path+\"'>\"+Name+\"</a>\"#" }
-        ]
-        , gridType: "GridLevel"
-        , exportExcel: {
-            isExport: false
-        }
-    };
-
-    return d;
-}
-
-function showMenu(img) {
-    var imgSrc = img.src + "";
-    var gridMenu = $("#gridMenu");
-    var dContent = $("#dContent");
-    var marginA = "0px";
-    var marginB = gridMenu.css("width");
-    marginB = "220px";
-    var a = "MenuShow.png";
-    var b = "MenuClose.png";
-
-    if (imgSrc.indexOf(a) != -1) {
-        /***************|Mở|***************/
-        img.src = img.src.replace(a, b);
-        dContent.css("margin-left", marginB);
-        img.style.marginLeft = marginB;
-        gridMenu.css("margin-left", marginA);
-    } else {
-        /***************|Đóng|***************/
-        img.src = img.src.replace(b, a);
-        gridMenu.css("margin-left", "-" + marginB);
-        img.style.marginLeft = marginA;
-        dContent.css("margin-left", marginA);
-    }
 }
 
 function createSMS() {

@@ -1,5 +1,6 @@
 ﻿//SetColor
 $primary: #ffffff;
+$background-menu: #ffffff;
 $panel-color: #252c33;//Màu nền header
 $color-primary: #337ab7;
 $color-primary-border: #2e6da4;
@@ -28,8 +29,11 @@ body {
 .wrapper {
     width: 100%;
     margin: 0 auto;
+    padding-right: 30px;
 }
-
+.wrapper-move {
+    padding-right: 303px;
+}
 .clear {
     clear: both;
 }
@@ -73,6 +77,15 @@ body {
     margin: 0 auto;
     margin-top: 111px !important;
     box-shadow: 0px 5px 15px #888888;
+}
+.header-item{
+    margin: 0 auto;
+    width:100%;
+    height: 39%;
+}
+.header-item li{
+    list-style: none;
+    float: left;
 }
 .text-white{
     color: white;
@@ -152,10 +165,11 @@ body {
     padding-left: 25px;
 }
 .panel-main{
-    width: 100%;
-    margin: 0 30px;
+    width:inherit;
+    margin-left:30px;
     transition: .25s;
     z-index: 10;
+    display:inline-block;
 }
 .panel-main-move{
     margin-left: 300px;
