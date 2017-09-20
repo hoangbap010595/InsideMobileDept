@@ -34,35 +34,7 @@ namespace PartialView.Areas.PartialView.Models
         public DataSet ExecuteDataset(string spName, string connectionString, Dictionary<string, object> filter)
         {
             DataSet ds = new DataSet();
-            #region Check connection string
-            int x = spName.LastIndexOf(".") + 1;
-            int y = spName.Length - x;
-            string store = spName.Substring(x, y);
-            string cut = store.Substring(0, 4);
-
-            #region Điều hướng store
-            if (
-                cut == "PARR" || cut == "PARW"
-                || connectionString == "PARRConnectionString"
-                || connectionString == "PARWConnectionString"
-                || connectionString == "sqlRelayString")
-            {
-                connectionString = "sqlConnectionWrite";
-                spName = spName.Replace("Partner.dbo", "PowerData.dbo");
-            }
-            if (store == "PARR_MAN_Get_EFCode"
-                || store == "PARR_MAN_Get_LLDepartmentINF"
-                || store == "PARR_MAN_Get_LLPartnerHR"
-                || store == "PARR_MAN_Get_LLPartnerSubTeam")
-            {
-                connectionString = "PARRConnectionString";
-                spName = spName.Replace("PowerData.dbo", "Partner.dbo");
-            }
-            #endregion
-
-            #endregion
             ds = ExecuteDatasetDefault(spName, connectionString, filter);
-            //ds = ExecuteDatasetRelay(spName, connectionString, filter);
             return ds;
         }
 
