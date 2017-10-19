@@ -7,20 +7,27 @@ using InsideMobileDept.Security;
 
 namespace InsideMobileDept.Controllers
 {
-
+    [HandleError()]
     public class HomeController : Controller
     {
         // GET: Home
         public ActionResult Index()
         {
-            ViewData["Action"] = "Trang chủ";
+            ViewBag.Action = "Trang chủ";
             return View();
         }
 
 
-        [CustomAuthorize(Roles = "system,admin")]
+        [CustomAuthorize(Roles = "Administrators,Users")]
         public ActionResult GetData()
         {
+            ViewBag.Action = "GetData";
+            return View();
+        }
+
+        public ActionResult GAdmin()
+        {
+            ViewBag.Action = "GAdmin";
             return View();
         }
     }
